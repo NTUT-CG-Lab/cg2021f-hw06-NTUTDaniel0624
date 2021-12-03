@@ -85,7 +85,7 @@
 			animate();
 
 			function init() {
-
+				const gui = new GUI();
 				container = document.createElement( 'div' );
 				document.body.appendChild( container );
 
@@ -153,8 +153,9 @@
 					mesh.visible = false;
                     scene.add( mesh );
                 }) );
-				//const gui = new GUI();
-				//gui.add( effectController, 'step', 1, models.length, 1 ).onChange( iterChange);
+
+				
+				
 				const effectController = { step: 1 };
 				let currentIter = effectController.step;
 				function iterChanger(){
@@ -164,7 +165,11 @@
 					textTag.innerText = "iter #"+models[currentIter-1].toString();
 					for(let i=0; i<models.length; i++){
 						let item = scene.getObjectByName(models[i]);
-						
+						if(i!==currentIter-1 && item.visible===true)
+						item.visible = false;
+						else if (i===currentIter-1)
+						item.visible = true;
+
 					}
 				}
 
@@ -172,7 +177,7 @@
 				// Lights
 
 				scene.add( new THREE.HemisphereLight( 0x443333, 0x111122 ) );
-
+				gui.add( effectController, 'step', 1, models.length, 1 ).onChange( iterChanger );
 				addShadowedLight( 1, 1, 1, 0xffffff, 1.35 );
 				addShadowedLight( 0.5, 1, - 1, 0xffaa00, 1 );
 				// renderer
